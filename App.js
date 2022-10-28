@@ -1,4 +1,5 @@
 import { StatusBar } from "expo-status-bar";
+import { useState } from "react";
 import { Platform, SafeAreaView, StyleSheet, Text, View } from "react-native";
 import { getStatusBarHeight } from "react-native-iphone-x-helper";
 import { friendProfiles, myProfile } from "./src/data";
@@ -12,9 +13,12 @@ import Profile from "./src/Profile";
 const statusBarHeight = getStatusBarHeight(true);
 
 export default function App() {
+  const [isOpened, setIsOpened] = useState(false);
+
   const onPressArrow = () => {
-    console.log('clicked arrow');
+    setIsOpened(!isOpened);
   }
+
   return (
     <View style={styles.container}>
       <Header />
@@ -36,9 +40,10 @@ export default function App() {
       <FriendSection 
         friendProfileLen={friendProfiles.length} 
         onPressArrow={onPressArrow}
+        isOpened={isOpened}
       />
 
-      <FriendList data={friendProfiles} />
+      <FriendList data={friendProfiles} isOpened={isOpened} />
     </View>
   );
 }
