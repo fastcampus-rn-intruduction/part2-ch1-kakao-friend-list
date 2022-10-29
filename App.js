@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import { useState } from "react";
-import { Platform, SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { FlatList, Platform, SafeAreaView, StyleSheet, Text, View } from "react-native";
 import { getStatusBarHeight } from "react-native-iphone-x-helper";
 import { friendProfiles, myProfile } from "./src/data";
 import Division from "./src/Division";
@@ -21,13 +21,20 @@ export default function App() {
     setIsOpened(!isOpened);
   }
 
-  return (
-    <View style={styles.container}>
-      <View style={{
-          flex: 1,
-          paddingHorizontal: 15,
-      }}>
-        <Header />
+  const ItemSeparatorComponent = () => <Margin height={13} />
+  const renderItem = ({ item }) => (
+    <View>
+      <Profile
+        uri={item.uri}
+        name={item.name} 
+        introduction={item.introduction}
+        isMe={false}
+      />
+    </View>
+  )
+  const ListHeaderComponent = () => (
+    <View style={{ backgroundColor:"white" }}>
+      <Header />
         
         <Margin height={10} />
 
@@ -35,6 +42,7 @@ export default function App() {
           uri={myProfile.uri}
           name={myProfile.name} 
           introduction={myProfile.introduction}
+          isMe={true}
         />
 
         <Margin height={15} />
@@ -49,10 +57,38 @@ export default function App() {
           isOpened={isOpened}
         />
 
+        <Margin height={5} />
+    </View>
+  )
+  const ListFooterComponent = () => <Margin height={10} />
+
+  return (
+    <View style={styles.container}>
+      <FlatList
+        data={isOpened ? friendProfiles : []}
+        contentContainerStyle={{ paddingHorizontal: 15 }}
+        keyExtractor={(_, index) => index}
+        stickyHeaderIndices={[0]}
+        ItemSeparatorComponent={ItemSeparatorComponent}
+        renderItem={renderItem}
+        ListHeaderComponent={ListHeaderComponent}
+        ListFooterComponent={ListFooterComponent}
+        showsVerticalScrollIndicator={false}
+      />
+      <TabBar selectedTabIdx={selectedTabIdx} setSelectedTabIdx={setSelectedTabIdx} />
+    </View>
+  )
+
+  return (
+    <View style={styles.container}>
+      <View style={{
+          flex: 1,
+          paddingHorizontal: 15,
+      }}>
+
         <FriendList data={friendProfiles} isOpened={isOpened} />
       </View>
 
-      <TabBar selectedTabIdx={selectedTabIdx} setSelectedTabIdx={setSelectedTabIdx} />
     </View>
   );
 }
