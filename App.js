@@ -85,7 +85,6 @@ export default function App() {
           flex: 1,
           paddingHorizontal: 15,
       }}>
-
         <FriendList data={friendProfiles} isOpened={isOpened} />
       </View>
 
