@@ -1,7 +1,7 @@
-import { StatusBar } from "expo-status-bar";
 import { useState } from "react";
-import { FlatList, Platform, SafeAreaView, StyleSheet, Text, View } from "react-native";
-import { getStatusBarHeight } from "react-native-iphone-x-helper";
+import { FlatList, StyleSheet, View } from "react-native";
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+
 import { friendProfiles, myProfile } from "./src/data";
 import Division from "./src/Division";
 import FriendList from "./src/FriendList";
@@ -10,8 +10,6 @@ import Header from "./src/Header";
 import Margin from "./src/Margin";
 import Profile from "./src/Profile";
 import TabBar from "./src/TabBar";
-
-const statusBarHeight = getStatusBarHeight(true);
 
 export default function App() {
   const [isOpened, setIsOpened] = useState(true);
@@ -63,20 +61,25 @@ export default function App() {
   const ListFooterComponent = () => <Margin height={10} />
 
   return (
-    <View style={styles.container}>
-      <FlatList
-        data={isOpened ? friendProfiles : []}
-        contentContainerStyle={{ paddingHorizontal: 15 }}
-        keyExtractor={(_, index) => index}
-        stickyHeaderIndices={[0]}
-        ItemSeparatorComponent={ItemSeparatorComponent}
-        renderItem={renderItem}
-        ListHeaderComponent={ListHeaderComponent}
-        ListFooterComponent={ListFooterComponent}
-        showsVerticalScrollIndicator={false}
-      />
-      <TabBar selectedTabIdx={selectedTabIdx} setSelectedTabIdx={setSelectedTabIdx} />
-    </View>
+    <SafeAreaProvider>
+      <SafeAreaView
+        style={styles.container}
+        edges={['top', 'right', 'bottom', 'left']} // 예외없이 모두 안전영역 적용
+      >
+        <FlatList
+          data={isOpened ? friendProfiles : []}
+          contentContainerStyle={{ paddingHorizontal: 15 }}
+          keyExtractor={(_, index) => index}
+          stickyHeaderIndices={[0]}
+          ItemSeparatorComponent={ItemSeparatorComponent}
+          renderItem={renderItem}
+          ListHeaderComponent={ListHeaderComponent}
+          ListFooterComponent={ListFooterComponent}
+          showsVerticalScrollIndicator={false}
+        />
+        <TabBar selectedTabIdx={selectedTabIdx} setSelectedTabIdx={setSelectedTabIdx} />
+      </SafeAreaView>
+    </SafeAreaProvider>
   )
 
   return (
@@ -96,6 +99,5 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    paddingTop: statusBarHeight,
   },
 });

@@ -1,9 +1,6 @@
 import React from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import { Ionicons, Fontisto } from '@expo/vector-icons'; 
-import { getBottomSpace } from 'react-native-iphone-x-helper';
-
-const bottomSpace = getBottomSpace()
 
 const TabButton = ({ isSelected, onPress, activeIconName, inactiveIconName, isIconFontisto, isIconIonicons }) => {
   return (
@@ -26,7 +23,6 @@ export default ({ selectedTabIdx, setSelectedTabIdx }) => {
   return (
     <View style={{
       flexDirection: "row",
-      marginBottom: bottomSpace,
       borderTopWidth: 0.5,
       borderColor: "grey"
     }}>
